@@ -1,4 +1,4 @@
-// Final Navigation.tsx - Glassmorphic mobile menu with fixed 'X' button, swipe-to-close, and blur-only expand/collapse
+// Final Navigation.tsx - Glassmorphic mobile menu with fixed 'X' button, swipe-to-close, and blur-only expand/collapse (no fade effect)
 
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -80,7 +80,7 @@ const Navigation = () => {
               onClick={() => setIsOpen(!isOpen)}
               className="p-2"
             >
-              {isOpen ? <X className="h-6 w-6" onClick={() => setIsOpen(false)} /> : <Menu className="h-6 w-6" />}
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
         </div>
@@ -103,7 +103,7 @@ const Navigation = () => {
               key={item.name}
               to={item.path}
               onClick={() => setIsOpen(false)}
-              className={`block px-4 py-3 rounded-md text-base font-medium transition-transform duration-300 ease-in-out ${
+              className={`block px-4 py-3 rounded-md text-base font-medium transition-transform duration-300 ease-out ${
                 isActive(item.path)
                   ? "text-primary bg-primary/10"
                   : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
