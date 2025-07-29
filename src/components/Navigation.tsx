@@ -68,10 +68,6 @@ const Navigation = () => {
     };
   }, [isOpen]);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
     <>
       <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/10 border-b border-white/10 shadow-sm">
@@ -106,7 +102,7 @@ const Navigation = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={toggleMenu}
+                onClick={() => setIsOpen(prev => !prev)}
                 className="p-2"
               >
                 {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -125,19 +121,22 @@ const Navigation = () => {
       )}
 
       {/* Mobile Menu Panel */}
-      {isOpen && (
-        <div className="md:hidden fixed top-16 left-0 w-full flex justify-center z-50">
-          <div
-            ref={panelRef}
-            className={`w-[90%] shadow-xl border border-white/30 rounded-xl mt-2 p-4 space-y-2 transform transition-transform duration-500 ease-out backdrop-blur-xl backdrop-saturate-150 ${
-              isOpen ? "scale-100 translate-y-0" : "scale-95 -translate-y-4"
-            }`}
-            style={{
-              background: "rgba(255, 255, 255, 0.85)",
-              backdropFilter: "blur(20px) saturate(180%)",
-              WebkitBackdropFilter: "blur(20px) saturate(180%)",
-            }}
-          >
+      <div
+        className={`md:hidden fixed top-16 left-0 w-full flex justify-center transition-all duration-300 ease-out z-50 pointer-events-none ${
+          isOpen ? "max-h-[600px]" : "max-h-0"
+        }`}
+      >
+        <div
+          ref={panelRef}
+          className={`w-[90%] pointer-events-auto shadow-xl border border-white/30 rounded-xl mt-2 p-4 space-y-2 transform transition-all duration-500 ease-out backdrop-blur-xl backdrop-saturate-150 ${
+            isOpen ? "scale-100 translate-y-0" : "scale-95 -translate-y-4"
+          }`}
+          style={{
+            background: "rgba(255, 255, 255, 0.85)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            WebkitBackdropFilter: "blur(20px) saturate(180%)",
+          }}
+        >
             {navItems.map((item, idx) => (
               <Link
                 key={item.name}
