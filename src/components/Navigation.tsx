@@ -3,7 +3,30 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
+
+// Animated hamburger menu component
+const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
+  return (
+    <div className="relative w-6 h-6 flex flex-col justify-center items-center">
+      <div className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
+           style={{
+             transform: isOpen ? 'rotate(45deg)' : 'translateY(-6px)',
+             opacity: isOpen ? 1 : 1
+           }} />
+      <div className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
+           style={{
+             opacity: isOpen ? 0 : 1,
+             transform: isOpen ? 'translateX(20px)' : 'translateY(0px)'
+           }} />
+      <div className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
+           style={{
+             transform: isOpen ? 'rotate(-45deg)' : 'translateY(6px)',
+             opacity: isOpen ? 1 : 1
+           }} />
+    </div>
+  );
+};
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -102,7 +125,7 @@ const Navigation = () => {
                 onClick={() => setIsOpen(!isOpen)}
                 className="p-2"
               >
-                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                <AnimatedMenuIcon isOpen={isOpen} />
               </Button>
             </div>
           </div>
