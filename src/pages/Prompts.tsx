@@ -41,9 +41,10 @@ const Prompts = () => {
 
           {/* Category Selection */}
           <div className="max-w-4xl mx-auto">
-            <h2 className="mb-8 text-center text-violet-600 font-bold text-4xl">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent text-center">
               What do you want to create?
             </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {promptCategories.map((category, index) => <Card key={category.id} className="group cursor-pointer bg-gradient-card border-border/50 hover:border-primary/30 shadow-card hover:shadow-elegant transition-all duration-500 transform hover:scale-105 animate-scaleIn" style={{
               animationDelay: `${index * 0.1}s`
