@@ -47,7 +47,7 @@ const Navigation = () => {
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && (
+        {isOpen && 
   <div className="fixed inset-0 z-40 md:hidden animate-fadeIn">
     <div className="mx-4 mt-20 p-4 rounded-2xl 
                     backdrop-blur-md bg-white/10 
