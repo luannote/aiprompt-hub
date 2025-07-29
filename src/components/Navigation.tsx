@@ -122,7 +122,11 @@ const Navigation = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={(e) => {
+                  console.log("X button clicked", isOpen);
+                  e.stopPropagation();
+                  setIsOpen(!isOpen);
+                }}
                 className="p-2"
               >
                 <AnimatedMenuIcon isOpen={isOpen} />
@@ -136,7 +140,10 @@ const Navigation = () => {
       {isOpen && (
         <div 
           className="md:hidden fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
-          onClick={() => setIsOpen(false)}
+          onClick={(e) => {
+            console.log("Overlay clicked");
+            setIsOpen(false);
+          }}
         />
       )}
 
