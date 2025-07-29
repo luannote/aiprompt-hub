@@ -19,7 +19,7 @@ const Navigation = () => {
     path: "/about"
   }];
   const isActive = (path: string) => location.pathname === path;
-  return <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/10 border-b border-white/10 shadow-sm">
+  return <nav className="fixed top-0 left-0 w-full z-50 h-16 backdrop-blur-md bg-white/10 border-b border-white/10 shadow-sm">
 
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
