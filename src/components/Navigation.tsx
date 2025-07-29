@@ -1,4 +1,4 @@
-// Fixed Navigation.tsx - Glassmorphic mobile menu with proper X button and scale-only animation
+// Fixed Navigation.tsx - Glassmorphic mobile menu with proper blur effect and global swipe-to-close
 
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -59,10 +59,7 @@ const Navigation = () => {
       }
     };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -102,7 +99,7 @@ const Navigation = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setIsOpen(prev => !prev)}
+                onClick={() => setIsOpen(!isOpen)}
                 className="p-2"
               >
                 {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -123,7 +120,7 @@ const Navigation = () => {
       {/* Mobile Menu Panel */}
       <div
         className={`md:hidden fixed top-16 left-0 w-full flex justify-center transition-all duration-300 ease-out z-50 pointer-events-none ${
-          isOpen ? "max-h-[600px]" : "max-h-0"
+          isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div
@@ -137,26 +134,25 @@ const Navigation = () => {
             WebkitBackdropFilter: "blur(20px) saturate(180%)",
           }}
         >
-            {navItems.map((item, idx) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                onClick={() => setIsOpen(false)}
-                className={`block px-4 py-3 rounded-md text-base font-medium transition-all duration-500 ease-in-out ${
-                  isActive(item.path)
-                    ? "text-primary bg-primary/15 shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/40"
-                }`}
-                style={{
-                  animationDelay: `${idx * 75}ms`,
-                }}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
+          {navItems.map((item, idx) => (
+            <Link
+              key={item.name}
+              to={item.path}
+              onClick={() => setIsOpen(false)}
+              className={`block px-4 py-3 rounded-md text-base font-medium transition-all duration-500 ease-in-out ${
+                isActive(item.path)
+                  ? "text-primary bg-primary/15 shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/40"
+              }`}
+              style={{
+                animationDelay: `${idx * 75}ms`,
+              }}
+            >
+              {item.name}
+            </Link>
+          ))}
         </div>
-      )}
+      </div>
     </>
   );
 };
