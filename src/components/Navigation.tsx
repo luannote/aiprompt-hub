@@ -49,9 +49,10 @@ const Navigation = () => {
         {/* Mobile Navigation */}
         {isOpen && 
   <div className="md:hidden animate-slideUp">
-    <div className="px-2 pt-2 pb-3 space-y-1 mt-2
-                    backdrop-blur-md bg-white/30 
-                    rounded-xl shadow-lg border border-white/10">
+    <div className="backdrop-blur-md bg-white/10 
+                border border-white/10 shadow-sm 
+                rounded-xl px-4 py-3 mt-2">
+
 
               {navItems.map(item => <Link key={item.name} to={item.path} className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${isActive(item.path) ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-accent/50"}`} onClick={() => setIsOpen(false)}>
                   {item.name}
