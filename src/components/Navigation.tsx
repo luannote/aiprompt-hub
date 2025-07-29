@@ -86,7 +86,7 @@ const Navigation = () => {
       {/* Mobile Menu Panel */}
       <div
         className={`md:hidden fixed top-16 left-0 w-full flex justify-center transition-all duration-300 ease-out z-50 pointer-events-none ${
-          isOpen ? "max-h-[600px] opacity-50" : "max-h-0 opacity-0"
+          isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div
