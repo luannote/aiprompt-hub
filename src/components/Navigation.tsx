@@ -100,7 +100,11 @@ const Navigation = () => {
                 onClick={() => setIsOpen(!isOpen)}
                 className="p-2"
               >
-                {isOpen ? <X className="h-6 w-6" onClick={() => setIsOpen(false)} /> : <Menu className="h-6 w-6" />}
+                {isOpen ? (
+                  <X className="h-6 w-6" onClick={() => setIsOpen(false)} />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
               </Button>
             </div>
           </div>
@@ -143,7 +147,9 @@ const Navigation = () => {
                   : "text-muted-foreground hover:text-foreground hover:bg-white/40"
               }`}
               style={{
-                animationDelay: `${idx * 75}ms`,
+                transitionProperty: "transform",
+                transitionDuration: "300ms",
+                transitionTimingFunction: "ease-in-out",
               }}
             >
               {item.name}
