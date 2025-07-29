@@ -1,4 +1,4 @@
-// Finalized Navigation.tsx - Glassmorphic mobile menu with animation and swipe-to-close (fixed X button + removed fade effect)
+// Final Navigation.tsx - Glassmorphic mobile menu with fixed 'X' button, swipe-to-close, and no fade effect
 
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -23,23 +23,26 @@ const Navigation = () => {
       touchStartY.current = e.touches[0].clientY;
     };
     const handleTouchMove = (e: TouchEvent) => {
-      if (touchStartY.current !== null) {
+      if (touchStartY.current !== null && isOpen) {
         const diff = e.touches[0].clientY - touchStartY.current;
         if (diff < -50) setIsOpen(false);
       }
     };
-    const ref = panelRef.current;
-    if (ref) {
-      ref.addEventListener("touchstart", handleTouchStart);
-      ref.addEventListener("touchmove", handleTouchMove);
+    const handleTouchEnd = () => {
+      touchStartY.current = null;
+    };
+
+    if (isOpen) {
+      document.addEventListener("touchstart", handleTouchStart);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
     }
     return () => {
-      if (ref) {
-        ref.removeEventListener("touchstart", handleTouchStart);
-        ref.removeEventListener("touchmove", handleTouchMove);
-      }
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
     };
-  }, []);
+  }, [isOpen]);
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/10 border-b border-white/10 shadow-sm">
@@ -77,11 +80,7 @@ const Navigation = () => {
               onClick={() => setIsOpen(!isOpen)}
               className="p-2"
             >
-              {isOpen ? (
-                <X className="h-6 w-6" onClick={() => setIsOpen(false)} />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
         </div>
@@ -95,7 +94,7 @@ const Navigation = () => {
       >
         <div
           ref={panelRef}
-          className={`w-[90%] pointer-events-auto shadow-card border border-white/20 rounded-xl mt-2 p-4 space-y-2 transform transition-transform duration-500 ease-out bg-white/20 backdrop-blur-md backdrop-saturate-150 ${
+          className={`w-[90%] pointer-events-auto shadow-card border border-white/20 rounded-xl mt-2 p-4 space-y-2 transform transition-transform duration-300 ease-out bg-white/20 backdrop-blur-md backdrop-saturate-150 ${
             isOpen ? "scale-100 translate-y-0" : "scale-95 -translate-y-4"
           }`}
         >
