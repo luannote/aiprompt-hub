@@ -1,4 +1,4 @@
-// Navigation.tsx - Đã chỉnh sửa theo yêu cầu
+// Fixed Navigation.tsx - Glassmorphic mobile menu with proper blur effect and global swipe-to-close
 
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -8,19 +8,16 @@ import { Menu, X, Sparkles } from "lucide-react";
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const panelRef = useRef<HTMLDivElement>(null);
-  const touchStartY = useRef<number | null>(null);
-
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Tools", path: "/tools" },
     { name: "Prompts", path: "/prompts" },
     { name: "About", path: "/about" },
   ];
-
   const isActive = (path: string) => location.pathname === path;
+  const panelRef = useRef<HTMLDivElement>(null);
+  const touchStartY = useRef<number | null>(null);
 
-  // Đóng menu khi vuốt lên
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY.current = e.touches[0].clientY;
@@ -40,6 +37,7 @@ const Navigation = () => {
       touchStartY.current = null;
     };
 
+    // Add global touch listeners when menu is open
     if (isOpen) {
       document.addEventListener("touchstart", handleTouchStart);
       document.addEventListener("touchmove", handleTouchMove);
@@ -53,7 +51,7 @@ const Navigation = () => {
     };
   }, [isOpen]);
 
-  // Đóng menu khi click ngoài
+  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(event.target as Node) && isOpen) {
@@ -69,7 +67,6 @@ const Navigation = () => {
 
   return (
     <>
-      {/* Header */}
       <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/10 border-b border-white/10 shadow-sm">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
@@ -82,7 +79,6 @@ const Navigation = () => {
               </span>
             </Link>
 
-            {/* Desktop Nav */}
             <div className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
                 <Link
@@ -99,7 +95,6 @@ const Navigation = () => {
               ))}
             </div>
 
-            {/* Mobile Menu Button */}
             <div className="md:hidden">
               <Button
                 variant="ghost"
@@ -114,9 +109,9 @@ const Navigation = () => {
         </div>
       </nav>
 
-      {/* Overlay - click ra ngoài để đóng */}
+      {/* Mobile Menu Overlay */}
       {isOpen && (
-        <div
+        <div 
           className="md:hidden fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         />
@@ -125,12 +120,12 @@ const Navigation = () => {
       {/* Mobile Menu Panel */}
       <div
         className={`md:hidden fixed top-16 left-0 w-full flex justify-center transition-all duration-300 ease-out z-50 pointer-events-none ${
-          isOpen ? "max-h-[600px]" : "max-h-0"
+          isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div
           ref={panelRef}
-          className={`w-[90%] pointer-events-auto shadow-xl border border-white/30 rounded-xl mt-2 p-4 space-y-2 transform transition-all duration-300 ease-out backdrop-blur-xl backdrop-saturate-150 ${
+          className={`w-[90%] pointer-events-auto shadow-xl border border-white/30 rounded-xl mt-2 p-4 space-y-2 transform transition-all duration-500 ease-out backdrop-blur-xl backdrop-saturate-150 ${
             isOpen ? "scale-100 translate-y-0" : "scale-95 -translate-y-4"
           }`}
           style={{
@@ -144,11 +139,14 @@ const Navigation = () => {
               key={item.name}
               to={item.path}
               onClick={() => setIsOpen(false)}
-              className={`block px-4 py-3 rounded-md text-base font-medium transition-all duration-300 ease-in-out ${
+              className={`block px-4 py-3 rounded-md text-base font-medium transition-all duration-500 ease-in-out ${
                 isActive(item.path)
                   ? "text-primary bg-primary/15 shadow-sm"
                   : "text-muted-foreground hover:text-foreground hover:bg-white/40"
               }`}
+              style={{
+                animationDelay: `${idx * 75}ms`,
+              }}
             >
               {item.name}
             </Link>
