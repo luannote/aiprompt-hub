@@ -18,11 +18,8 @@ const Tools = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12 animate-fadeIn">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent py-[10px]">Tổng hợp Tools - AI</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Discover and explore the most powerful AI tools for every creative task. 
-            From image generation to code writing, find your perfect AI companion.
-          </p>
+          
+          
         </div>
 
         {/* Search and Filters */}
