@@ -6,51 +6,39 @@ import PromptGrid from "@/components/PromptGrid";
 import { promptTools, promptExamples } from "@/data/prompts";
 
 // Category definitions
-const promptCategories = [
-  {
-    id: "image-generation",
-    name: "Prompt for Image Generation",
-    icon: "🎨",
-    description: "Create stunning visuals with AI image generators",
-    tools: ["midjourney", "dalle3", "stable-diffusion"]
-  },
-  {
-    id: "video-creation", 
-    name: "Prompt for Video Creation",
-    icon: "🎥",
-    description: "Generate and edit videos using AI technology",
-    tools: ["sora"]
-  },
-  {
-    id: "chat-assistant",
-    name: "Prompt for ChatGPT",
-    icon: "💬", 
-    description: "Train and optimize AI assistants for better responses",
-    tools: ["chatgpt"]
-  }
-];
-
+const promptCategories = [{
+  id: "image-generation",
+  name: "Prompt for Image Generation",
+  icon: "🎨",
+  description: "Create stunning visuals with AI image generators",
+  tools: ["midjourney", "dalle3", "stable-diffusion"]
+}, {
+  id: "video-creation",
+  name: "Prompt for Video Creation",
+  icon: "🎥",
+  description: "Generate and edit videos using AI technology",
+  tools: ["sora"]
+}, {
+  id: "chat-assistant",
+  name: "Prompt for ChatGPT",
+  icon: "💬",
+  description: "Train and optimize AI assistants for better responses",
+  tools: ["chatgpt"]
+}];
 const Prompts = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
-
-  const filteredPrompts = selectedTool 
-    ? promptExamples.filter(example => example.tool === selectedTool)
-    : [];
-
+  const filteredPrompts = selectedTool ? promptExamples.filter(example => example.tool === selectedTool) : [];
   const selectedToolData = promptTools.find(tool => tool.id === selectedTool);
   const selectedCategoryData = promptCategories.find(cat => cat.id === selectedCategory);
 
   // Show categories first
   if (!selectedCategory) {
-    return (
-      <div className="min-h-screen pt-28 pb-8">
+    return <div className="min-h-screen pt-28 pb-8">
         <div className="container mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-12 animate-fadeIn">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
-              Prompt Library
-            </h1>
+            <h1 className="text-4xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent md:text-6xl py-[2px]">Thư viện Promt</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Choose your creative focus and discover tested prompts for the best AI tools.
             </p>
@@ -62,13 +50,9 @@ const Prompts = () => {
               What do you want to create?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {promptCategories.map((category, index) => (
-                <Card 
-                  key={category.id}
-                  className="group cursor-pointer bg-gradient-card border-border/50 hover:border-primary/30 shadow-card hover:shadow-elegant transition-all duration-500 transform hover:scale-105 animate-scaleIn"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                  onClick={() => setSelectedCategory(category.id)}
-                >
+              {promptCategories.map((category, index) => <Card key={category.id} className="group cursor-pointer bg-gradient-card border-border/50 hover:border-primary/30 shadow-card hover:shadow-elegant transition-all duration-500 transform hover:scale-105 animate-scaleIn" style={{
+              animationDelay: `${index * 0.1}s`
+            }} onClick={() => setSelectedCategory(category.id)}>
                   <CardContent className="p-8 text-center">
                     <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">
                       {category.icon}
@@ -80,31 +64,21 @@ const Prompts = () => {
                       {category.description}
                     </p>
                   </CardContent>
-                </Card>
-              ))}
+                </Card>)}
             </div>
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
 
   // Show tools for selected category
   if (!selectedTool) {
-    const categoryTools = promptTools.filter(tool => 
-      selectedCategoryData?.tools.includes(tool.id)
-    );
-
-    return (
-      <div className="min-h-screen py-8">
+    const categoryTools = promptTools.filter(tool => selectedCategoryData?.tools.includes(tool.id));
+    return <div className="min-h-screen py-8">
         <div className="container mx-auto px-4">
           {/* Header with Back Button */}
           <div className="mb-8 animate-fadeIn">
-            <Button
-              variant="ghost"
-              onClick={() => setSelectedCategory(null)}
-              className="mb-4 hover:bg-primary/10"
-            >
+            <Button variant="ghost" onClick={() => setSelectedCategory(null)} className="mb-4 hover:bg-primary/10">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Categories
             </Button>
@@ -127,13 +101,9 @@ const Prompts = () => {
           {/* Tool Selection */}
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categoryTools.map((tool, index) => (
-                <Card 
-                  key={tool.id}
-                  className="group cursor-pointer bg-gradient-card border-border/50 hover:border-primary/30 shadow-card hover:shadow-elegant transition-all duration-500 transform hover:scale-105 animate-scaleIn"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                  onClick={() => setSelectedTool(tool.id)}
-                >
+              {categoryTools.map((tool, index) => <Card key={tool.id} className="group cursor-pointer bg-gradient-card border-border/50 hover:border-primary/30 shadow-card hover:shadow-elegant transition-all duration-500 transform hover:scale-105 animate-scaleIn" style={{
+              animationDelay: `${index * 0.1}s`
+            }} onClick={() => setSelectedTool(tool.id)}>
                   <CardContent className="p-6 text-center">
                     <div className="text-4xl mb-4 bg-gradient-primary rounded-xl p-4 shadow-card group-hover:shadow-glow transition-all duration-300 inline-block">
                       {tool.logo}
@@ -145,25 +115,17 @@ const Prompts = () => {
                       View Prompts
                     </p>
                   </CardContent>
-                </Card>
-              ))}
+                </Card>)}
             </div>
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen py-8">
+  return <div className="min-h-screen py-8">
       <div className="container mx-auto px-4">
         {/* Header with Back Button */}
         <div className="mb-8 animate-fadeIn">
-          <Button
-            variant="ghost"
-            onClick={() => setSelectedTool(null)}
-            className="mb-4 hover:bg-primary/10"
-          >
+          <Button variant="ghost" onClick={() => setSelectedTool(null)} className="mb-4 hover:bg-primary/10">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Tools
           </Button>
@@ -219,8 +181,6 @@ const Prompts = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Prompts;
