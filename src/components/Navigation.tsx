@@ -49,10 +49,15 @@ const Navigation = () => {
         {/* Mobile Navigation */}
         {isOpen && 
   <div className="fixed inset-0 z-40 md:hidden animate-fadeIn">
-    <div className="mx-4 mt-20 p-6 rounded-2xl 
-                    backdrop-blur-md bg-white/10 
-                    shadow-sm border border-white/10 
+    {/* Lớp nền sau menu để có cái để làm mờ */}
+    <div className="absolute inset-0 backdrop-blur-md bg-white/10" />
+
+    {/* Lớp chính chứa menu */}
+    <div className="relative mx-4 mt-20 p-6 rounded-2xl 
+                    backdrop-blur-md bg-white/30 
+                    shadow-card border border-white/10 
                     space-y-4">
+
 
 
 
