@@ -47,7 +47,7 @@ const Navigation = () => {
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && (
+        {isOpen && 
   <div className="md:hidden animate-slideUp">
     <div className="px-2 pt-2 pb-3 space-y-1 mt-2
                     backdrop-blur-md bg-white/10 
