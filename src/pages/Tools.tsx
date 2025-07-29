@@ -20,7 +20,8 @@ const Tools = () => {
   const regularTools = filteredTools.filter(tool => !tool.featured);
 
   return (
-    <div className="min-h-screen py-8">
+    return (
+  <div className="min-h-screen pt-28 pb-8">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12 animate-fadeIn">
