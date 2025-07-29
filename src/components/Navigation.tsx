@@ -37,7 +37,6 @@ const Navigation = () => {
       touchStartY.current = null;
     };
 
-    // Add global touch listeners when menu is open
     if (isOpen) {
       document.addEventListener("touchstart", handleTouchStart);
       document.addEventListener("touchmove", handleTouchMove);
@@ -51,7 +50,6 @@ const Navigation = () => {
     };
   }, [isOpen]);
 
-  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(event.target as Node) && isOpen) {
@@ -102,7 +100,7 @@ const Navigation = () => {
                 onClick={() => setIsOpen(!isOpen)}
                 className="p-2"
               >
-                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isOpen ? <X className="h-6 w-6" onClick={() => setIsOpen(false)} /> : <Menu className="h-6 w-6" />}
               </Button>
             </div>
           </div>
@@ -111,7 +109,7 @@ const Navigation = () => {
 
       {/* Mobile Menu Overlay */}
       {isOpen && (
-        <div 
+        <div
           className="md:hidden fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         />
@@ -119,13 +117,13 @@ const Navigation = () => {
 
       {/* Mobile Menu Panel */}
       <div
-        className={`md:hidden fixed top-16 left-0 w-full flex justify-center transition-all duration-300 ease-out z-50 pointer-events-none ${
-          isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
+        className={`md:hidden fixed top-16 left-0 w-full flex justify-center transition-[max-height] duration-300 ease-out z-50 pointer-events-none ${
+          isOpen ? "max-h-[600px]" : "max-h-0"
         }`}
       >
         <div
           ref={panelRef}
-          className={`w-[90%] pointer-events-auto shadow-xl border border-white/30 rounded-xl mt-2 p-4 space-y-2 transform transition-all duration-500 ease-out backdrop-blur-xl backdrop-saturate-150 ${
+          className={`w-[90%] pointer-events-auto shadow-xl border border-white/30 rounded-xl mt-2 p-4 space-y-2 transform transition-transform duration-300 ease-out backdrop-blur-xl backdrop-saturate-150 ${
             isOpen ? "scale-100 translate-y-0" : "scale-95 -translate-y-4"
           }`}
           style={{
@@ -139,7 +137,7 @@ const Navigation = () => {
               key={item.name}
               to={item.path}
               onClick={() => setIsOpen(false)}
-              className={`block px-4 py-3 rounded-md text-base font-medium transition-all duration-500 ease-in-out ${
+              className={`block px-4 py-3 rounded-md text-base font-medium transition-transform duration-300 ease-in-out ${
                 isActive(item.path)
                   ? "text-primary bg-primary/15 shadow-sm"
                   : "text-muted-foreground hover:text-foreground hover:bg-white/40"
