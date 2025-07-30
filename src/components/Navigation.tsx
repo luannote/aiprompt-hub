@@ -9,21 +9,27 @@ import { Sparkles } from "lucide-react";
 const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <div className="relative w-6 h-6 flex flex-col justify-center items-center">
-      <div className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
-           style={{
-             transform: isOpen ? 'rotate(45deg)' : 'translateY(-6px)',
-             opacity: isOpen ? 1 : 1
-           }} />
-      <div className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
-           style={{
-             opacity: isOpen ? 0 : 1,
-             transform: isOpen ? 'translateX(20px)' : 'translateY(0px)'
-           }} />
-      <div className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
-           style={{
-             transform: isOpen ? 'rotate(-45deg)' : 'translateY(6px)',
-             opacity: isOpen ? 1 : 1
-           }} />
+      <div
+        className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
+        style={{
+          transform: isOpen ? "rotate(45deg)" : "translateY(-6px)",
+          opacity: isOpen ? 1 : 1,
+        }}
+      />
+      <div
+        className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
+        style={{
+          opacity: isOpen ? 0 : 1,
+          transform: isOpen ? "translateX(20px)" : "translateY(0px)",
+        }}
+      />
+      <div
+        className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
+        style={{
+          transform: isOpen ? "rotate(-45deg)" : "translateY(6px)",
+          opacity: isOpen ? 1 : 1,
+        }}
+      />
     </div>
   );
 };
@@ -119,16 +125,7 @@ const Navigation = () => {
             </div>
 
             <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={(e) => {
-                  console.log("X button clicked", isOpen);
-                  e.stopPropagation();
-                  setIsOpen(!isOpen);
-                }}
-                className="p-2"
-              >
+              <Button variant="ghost" size="sm" className="p-2">
                 <AnimatedMenuIcon isOpen={isOpen} />
               </Button>
             </div>
@@ -138,7 +135,7 @@ const Navigation = () => {
 
       {/* Mobile Menu Overlay */}
       {isOpen && (
-        <div 
+        <div
           className="md:hidden fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
           onClick={(e) => {
             console.log("Overlay clicked");
