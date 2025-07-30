@@ -1,55 +1,59 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Sparkles, Menu, Sun, Moon, Globe } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 
-// Hiệu ứng hamburger menu đẹp mắt và mượt mà
+// Animated hamburger/X button
 const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <div className="relative w-6 h-6 flex flex-col justify-center items-center overflow-hidden">
-      {/* Gạch trên - morphing thành X */}
+      {/* Top bar */}
       <div
         className="absolute w-5 h-0.5 bg-current transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
         style={{
-          transform: isOpen 
-            ? "rotate(45deg) translateY(0px)" 
+          transform: isOpen
+            ? "rotate(45deg) translateY(0px)"
             : "rotate(0deg) translateY(-6px)",
           transformOrigin: "center",
         }}
       />
-      
-      {/* Gạch giữa - xoay và biến mất/xuất hiện mượt mà */}
+      {/* Middle bar */}
       <div
         className="absolute w-5 h-0.5 bg-current transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)]"
         style={{
           opacity: isOpen ? 0 : 1,
-          transform: isOpen 
-            ? "rotate(180deg) scale(0.3)" 
+          transform: isOpen
+            ? "rotate(180deg) scale(0.3)"
             : "rotate(0deg) scale(1)",
           transformOrigin: "center",
         }}
       />
-      
-      {/* Gạch dưới - morphing thành X */}
+      {/* Bottom bar */}
       <div
         className="absolute w-5 h-0.5 bg-current transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
         style={{
-          transform: isOpen 
-            ? "rotate(-45deg) translateY(0px)" 
+          transform: isOpen
+            ? "rotate(-45deg) translateY(0px)"
             : "rotate(0deg) translateY(6px)",
           transformOrigin: "center",
         }}
       />
-      
-      {/* Hiệu ứng glow khi active */}
+      {/* Glow effect */}
       <div
         className="absolute inset-0 rounded-full transition-all duration-300"
         style={{
-          boxShadow: isOpen 
-            ? "0 0 20px rgba(var(--primary-rgb), 0.3)" 
+          boxShadow: isOpen
+            ? "0 0 20px rgba(var(--primary-rgb), 0.3)"
             : "none",
           transform: isOpen ? "scale(1.5)" : "scale(1)",
         }}
@@ -63,27 +67,25 @@ const Navigation = () => {
   const location = useLocation();
   const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
-  
-  // Desktop navigation items (không có About)
+
   const desktopNavItems = [
     { name: "Home", path: "/" },
     { name: "Tools", path: "/tools" },
     { name: "Prompts", path: "/prompts" },
   ];
-  
-  // Mobile navigation items (có About)
+
   const mobileNavItems = [
     { name: "Home", path: "/" },
     { name: "Tools", path: "/tools" },
     { name: "Prompts", path: "/prompts" },
     { name: "About", path: "/about" },
   ];
-  
+
   const isActive = (path: string) => location.pathname === path;
   const panelRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number | null>(null);
 
-  // Swipe để đóng menu
+  // Swipe to close
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY.current = e.touches[0].clientY;
@@ -116,10 +118,14 @@ const Navigation = () => {
     };
   }, [isOpen]);
 
-  // Click ra ngoài để đóng
+  // Click outside to close
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(event.target as Node) && isOpen) {
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(event.target as Node) &&
+        isOpen
+      ) {
         setIsOpen(false);
       }
     };
@@ -135,6 +141,7 @@ const Navigation = () => {
       <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/10 border-b border-white/10 shadow-sm">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
+            {/* Logo */}
             <Link to="/" className="flex items-center space-x-2 group">
               <div className="p-2 bg-gradient-primary rounded-lg shadow-card group-hover:shadow-glow transition-all duration-300">
                 <Sparkles className="h-6 w-6 text-primary-foreground" />
@@ -144,7 +151,7 @@ const Navigation = () => {
               </span>
             </Link>
 
-            {/* Desktop menu */}
+            {/* Desktop nav */}
             <div className="hidden md:flex items-center space-x-8">
               {desktopNavItems.map((item) => (
                 <Link
@@ -159,8 +166,8 @@ const Navigation = () => {
                   {item.name}
                 </Link>
               ))}
-              
-              {/* Desktop hamburger menu */}
+
+              {/* Desktop menu dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="p-2">
@@ -168,40 +175,33 @@ const Navigation = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-background/95 backdrop-blur-xl border-border/50">
-                  {/* About */}
                   <DropdownMenuItem asChild>
                     <Link to="/about" className="cursor-pointer">
-                      {t('about')}
+                      {t("about")}
                     </Link>
                   </DropdownMenuItem>
-                  
                   <DropdownMenuSeparator />
-                  
-                  {/* Language */}
-                  <DropdownMenuLabel className="font-medium">{t('language')}</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={() => setLanguage('en')} className="cursor-pointer">
+                  <DropdownMenuLabel>{t("language")}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => setLanguage("en")}>
                     <Globe className="h-4 w-4 mr-2" />
-                    English {language === 'en' && '✓'}
+                    English {language === "en" && "✓"}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setLanguage('vi')} className="cursor-pointer">
+                  <DropdownMenuItem onClick={() => setLanguage("vi")}>
                     <Globe className="h-4 w-4 mr-2" />
-                    Tiếng Việt {language === 'vi' && '✓'}
+                    Tiếng Việt {language === "vi" && "✓"}
                   </DropdownMenuItem>
-                  
                   <DropdownMenuSeparator />
-                  
-                  {/* Theme */}
-                  <DropdownMenuLabel className="font-medium">{t('theme')}</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
-                    {theme === 'light' ? (
+                  <DropdownMenuLabel>{t("theme")}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={toggleTheme}>
+                    {theme === "light" ? (
                       <>
                         <Moon className="h-4 w-4 mr-2" />
-                        {t('darkMode')}
+                        {t("darkMode")}
                       </>
                     ) : (
                       <>
                         <Sun className="h-4 w-4 mr-2" />
-                        {t('lightMode')}
+                        {t("lightMode")}
                       </>
                     )}
                   </DropdownMenuItem>
@@ -211,14 +211,20 @@ const Navigation = () => {
 
             {/* Mobile button */}
             <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="p-2"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-                <AnimatedMenuIcon isOpen={isOpen} />
-              </Button>
+              {!isOpen ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="p-2"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <AnimatedMenuIcon isOpen={false} />
+                </Button>
+              ) : (
+                <div className="p-2">
+                  <AnimatedMenuIcon isOpen={true} />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -232,7 +238,7 @@ const Navigation = () => {
         />
       )}
 
-      {/* Mobile menu panel */}
+      {/* Mobile menu */}
       <div
         className={`md:hidden fixed top-16 left-0 w-full flex justify-center transition-all duration-300 ease-out z-50 pointer-events-none ${
           isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
@@ -266,60 +272,60 @@ const Navigation = () => {
               {item.name}
             </Link>
           ))}
-          
-          {/* Mobile Settings Section */}
+
+          {/* Mobile Settings */}
           <div className="border-t border-white/20 pt-3 mt-3">
             <div className="px-4 py-2 text-sm font-medium text-muted-foreground">
-              {t('settings')}
+              {t("settings")}
             </div>
-            
-            {/* Language Settings */}
+
+            {/* Language */}
             <div className="space-y-1">
               <div className="px-4 py-2 text-xs font-medium text-muted-foreground">
-                {t('language')}
+                {t("language")}
               </div>
               <button
-                onClick={() => setLanguage('en')}
+                onClick={() => setLanguage("en")}
                 className={`w-full text-left px-4 py-2 rounded-md text-sm transition-all ${
-                  language === 'en' 
-                    ? "text-primary bg-primary/15" 
+                  language === "en"
+                    ? "text-primary bg-primary/15"
                     : "text-muted-foreground hover:text-foreground hover:bg-white/20"
                 }`}
               >
                 <Globe className="h-4 w-4 mr-2 inline" />
-                English {language === 'en' && '✓'}
+                English {language === "en" && "✓"}
               </button>
               <button
-                onClick={() => setLanguage('vi')}
+                onClick={() => setLanguage("vi")}
                 className={`w-full text-left px-4 py-2 rounded-md text-sm transition-all ${
-                  language === 'vi' 
-                    ? "text-primary bg-primary/15" 
+                  language === "vi"
+                    ? "text-primary bg-primary/15"
                     : "text-muted-foreground hover:text-foreground hover:bg-white/20"
                 }`}
               >
                 <Globe className="h-4 w-4 mr-2 inline" />
-                Tiếng Việt {language === 'vi' && '✓'}
+                Tiếng Việt {language === "vi" && "✓"}
               </button>
             </div>
-            
-            {/* Theme Settings */}
+
+            {/* Theme */}
             <div className="space-y-1 mt-3">
               <div className="px-4 py-2 text-xs font-medium text-muted-foreground">
-                {t('theme')}
+                {t("theme")}
               </div>
               <button
                 onClick={toggleTheme}
                 className="w-full text-left px-4 py-2 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-white/20 transition-all"
               >
-                {theme === 'light' ? (
+                {theme === "light" ? (
                   <>
                     <Moon className="h-4 w-4 mr-2 inline" />
-                    {t('darkMode')}
+                    {t("darkMode")}
                   </>
                 ) : (
                   <>
                     <Sun className="h-4 w-4 mr-2 inline" />
-                    {t('lightMode')}
+                    {t("lightMode")}
                   </>
                 )}
               </button>
