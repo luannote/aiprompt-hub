@@ -1,66 +1,59 @@
-// Navigation.tsx - Fixed: tách nút mở và nút X hiển thị
-
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Sparkles, Menu, Sun, Moon, Globe } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
-// Icon động ba gạch / X với hiệu ứng đẹp mắt
+// Hiệu ứng hamburger menu đẹp mắt và mượt mà
 const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
   return (
-    <div className="relative w-6 h-6 flex flex-col justify-center items-center">
-      {/* Gạch thứ nhất - xoay thành X trên với hiệu ứng bounce */}
+    <div className="relative w-6 h-6 flex flex-col justify-center items-center overflow-hidden">
+      {/* Gạch trên - morphing thành X */}
       <div
-        className={`absolute w-5 h-0.5 bg-current transition-all duration-700 ${
-          isOpen ? 'animate-bounce' : ''
-        }`}
+        className="absolute w-5 h-0.5 bg-current transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
         style={{
           transform: isOpen 
-            ? "rotate(45deg) translateY(0px) scale(1.2)" 
-            : "rotate(0deg) translateY(-6px) scale(1)",
+            ? "rotate(45deg) translateY(0px)" 
+            : "rotate(0deg) translateY(-6px)",
           transformOrigin: "center",
-          filter: isOpen ? "drop-shadow(0 0 4px currentColor)" : "none"
         }}
       />
       
-      {/* Gạch thứ hai - bay lượn và xoay tròn biến mất */}
+      {/* Gạch giữa - xoay và biến mất/xuất hiện mượt mà */}
       <div
-        className="absolute w-5 h-0.5 bg-current transition-all duration-800"
+        className="absolute w-5 h-0.5 bg-current transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)]"
         style={{
           opacity: isOpen ? 0 : 1,
           transform: isOpen 
-            ? "translateX(50px) translateY(-20px) rotate(720deg) scale(0)" 
-            : "translateX(0px) translateY(0px) rotate(0deg) scale(1)",
+            ? "rotate(180deg) scale(0.3)" 
+            : "rotate(0deg) scale(1)",
           transformOrigin: "center",
-          filter: isOpen ? "blur(2px)" : "none"
         }}
       />
       
-      {/* Gạch thứ ba - xoay thành X dưới với hiệu ứng bounce */}
+      {/* Gạch dưới - morphing thành X */}
       <div
-        className={`absolute w-5 h-0.5 bg-current transition-all duration-700 ${
-          isOpen ? 'animate-bounce' : ''
-        }`}
+        className="absolute w-5 h-0.5 bg-current transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
         style={{
           transform: isOpen 
-            ? "rotate(-45deg) translateY(0px) scale(1.2)" 
-            : "rotate(0deg) translateY(6px) scale(1)",
+            ? "rotate(-45deg) translateY(0px)" 
+            : "rotate(0deg) translateY(6px)",
           transformOrigin: "center",
-          filter: isOpen ? "drop-shadow(0 0 4px currentColor)" : "none",
-          animationDelay: isOpen ? "0.1s" : "0s"
         }}
       />
       
-      {/* Hiệu ứng sáng lan tỏa */}
-      {isOpen && (
-        <div 
-          className="absolute inset-0 rounded-full animate-ping"
-          style={{
-            border: "1px solid currentColor",
-            opacity: 0.6
-          }}
-        />
-      )}
+      {/* Hiệu ứng glow khi active */}
+      <div
+        className="absolute inset-0 rounded-full transition-all duration-300"
+        style={{
+          boxShadow: isOpen 
+            ? "0 0 20px rgba(var(--primary-rgb), 0.3)" 
+            : "none",
+          transform: isOpen ? "scale(1.5)" : "scale(1)",
+        }}
+      />
     </div>
   );
 };
@@ -68,12 +61,24 @@ const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const navItems = [
+  const { language, setLanguage, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
+  
+  // Desktop navigation items (không có About)
+  const desktopNavItems = [
+    { name: "Home", path: "/" },
+    { name: "Tools", path: "/tools" },
+    { name: "Prompts", path: "/prompts" },
+  ];
+  
+  // Mobile navigation items (có About)
+  const mobileNavItems = [
     { name: "Home", path: "/" },
     { name: "Tools", path: "/tools" },
     { name: "Prompts", path: "/prompts" },
     { name: "About", path: "/about" },
   ];
+  
   const isActive = (path: string) => location.pathname === path;
   const panelRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number | null>(null);
@@ -141,7 +146,7 @@ const Navigation = () => {
 
             {/* Desktop menu */}
             <div className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
+              {desktopNavItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.path}
@@ -154,24 +159,66 @@ const Navigation = () => {
                   {item.name}
                 </Link>
               ))}
+              
+              {/* Desktop hamburger menu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="p-2">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-background/95 backdrop-blur-xl border-border/50">
+                  {/* About */}
+                  <DropdownMenuItem asChild>
+                    <Link to="/about" className="cursor-pointer">
+                      {t('about')}
+                    </Link>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator />
+                  
+                  {/* Language */}
+                  <DropdownMenuLabel className="font-medium">{t('language')}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => setLanguage('en')} className="cursor-pointer">
+                    <Globe className="h-4 w-4 mr-2" />
+                    English {language === 'en' && '✓'}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setLanguage('vi')} className="cursor-pointer">
+                    <Globe className="h-4 w-4 mr-2" />
+                    Tiếng Việt {language === 'vi' && '✓'}
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator />
+                  
+                  {/* Theme */}
+                  <DropdownMenuLabel className="font-medium">{t('theme')}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
+                    {theme === 'light' ? (
+                      <>
+                        <Moon className="h-4 w-4 mr-2" />
+                        {t('darkMode')}
+                      </>
+                    ) : (
+                      <>
+                        <Sun className="h-4 w-4 mr-2" />
+                        {t('lightMode')}
+                      </>
+                    )}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
-            {/* Mobile button: Chỉ hiện nút khi menu đang đóng */}
+            {/* Mobile button */}
             <div className="md:hidden">
-              {!isOpen ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="p-2"
-                  onClick={() => setIsOpen(true)}
-                >
-                  <AnimatedMenuIcon isOpen={false} />
-                </Button>
-              ) : (
-                <div className="p-2">
-                  <AnimatedMenuIcon isOpen={true} />
-                </div>
-              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="p-2"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <AnimatedMenuIcon isOpen={isOpen} />
+              </Button>
             </div>
           </div>
         </div>
@@ -202,7 +249,7 @@ const Navigation = () => {
             WebkitBackdropFilter: "blur(20px) saturate(180%)",
           }}
         >
-          {navItems.map((item, idx) => (
+          {mobileNavItems.map((item, idx) => (
             <Link
               key={item.name}
               to={item.path}
@@ -219,6 +266,65 @@ const Navigation = () => {
               {item.name}
             </Link>
           ))}
+          
+          {/* Mobile Settings Section */}
+          <div className="border-t border-white/20 pt-3 mt-3">
+            <div className="px-4 py-2 text-sm font-medium text-muted-foreground">
+              {t('settings')}
+            </div>
+            
+            {/* Language Settings */}
+            <div className="space-y-1">
+              <div className="px-4 py-2 text-xs font-medium text-muted-foreground">
+                {t('language')}
+              </div>
+              <button
+                onClick={() => setLanguage('en')}
+                className={`w-full text-left px-4 py-2 rounded-md text-sm transition-all ${
+                  language === 'en' 
+                    ? "text-primary bg-primary/15" 
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/20"
+                }`}
+              >
+                <Globe className="h-4 w-4 mr-2 inline" />
+                English {language === 'en' && '✓'}
+              </button>
+              <button
+                onClick={() => setLanguage('vi')}
+                className={`w-full text-left px-4 py-2 rounded-md text-sm transition-all ${
+                  language === 'vi' 
+                    ? "text-primary bg-primary/15" 
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/20"
+                }`}
+              >
+                <Globe className="h-4 w-4 mr-2 inline" />
+                Tiếng Việt {language === 'vi' && '✓'}
+              </button>
+            </div>
+            
+            {/* Theme Settings */}
+            <div className="space-y-1 mt-3">
+              <div className="px-4 py-2 text-xs font-medium text-muted-foreground">
+                {t('theme')}
+              </div>
+              <button
+                onClick={toggleTheme}
+                className="w-full text-left px-4 py-2 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-white/20 transition-all"
+              >
+                {theme === 'light' ? (
+                  <>
+                    <Moon className="h-4 w-4 mr-2 inline" />
+                    {t('darkMode')}
+                  </>
+                ) : (
+                  <>
+                    <Sun className="h-4 w-4 mr-2 inline" />
+                    {t('lightMode')}
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>
