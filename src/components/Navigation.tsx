@@ -1,11 +1,11 @@
-// Navigation.tsx - Glassmorphic mobile menu with proper blur and fixed click behavior
+// Navigation.tsx - Fixed: tách nút mở và nút X hiển thị
 
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 
-// Animated hamburger/X icon
+// Icon động ba gạch / X
 const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <div className="relative w-6 h-6 flex flex-col justify-center items-center">
@@ -47,7 +47,7 @@ const Navigation = () => {
   const panelRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number | null>(null);
 
-  // Swipe up to close
+  // Swipe để đóng menu
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY.current = e.touches[0].clientY;
@@ -80,7 +80,7 @@ const Navigation = () => {
     };
   }, [isOpen]);
 
-  // Click outside to close
+  // Click ra ngoài để đóng
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(event.target as Node) && isOpen) {
@@ -108,7 +108,7 @@ const Navigation = () => {
               </span>
             </Link>
 
-            {/* Desktop Menu */}
+            {/* Desktop menu */}
             <div className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
                 <Link
@@ -125,18 +125,22 @@ const Navigation = () => {
               ))}
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile button: Chỉ hiện nút khi menu đang đóng */}
             <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="p-2"
-                onClick={() => {
-                  if (!isOpen) setIsOpen(true); // ✅ chỉ mở nếu đang đóng
-                }}
-              >
-                <AnimatedMenuIcon isOpen={isOpen} />
-              </Button>
+              {!isOpen ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="p-2"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <AnimatedMenuIcon isOpen={false} />
+                </Button>
+              ) : (
+                <div className="p-2">
+                  <AnimatedMenuIcon isOpen={true} />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -150,7 +154,7 @@ const Navigation = () => {
         />
       )}
 
-      {/* Mobile Menu Panel */}
+      {/* Mobile menu panel */}
       <div
         className={`md:hidden fixed top-16 left-0 w-full flex justify-center transition-all duration-300 ease-out z-50 pointer-events-none ${
           isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
