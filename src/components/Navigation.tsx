@@ -13,7 +13,7 @@ const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
         className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
         style={{
           transform: isOpen ? "rotate(45deg)" : "translateY(-6px)",
-          opacity: isOpen ? 1 : 1,
+          opacity: 1,
         }}
       />
       <div
@@ -27,7 +27,7 @@ const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
         className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
         style={{
           transform: isOpen ? "rotate(-45deg)" : "translateY(6px)",
-          opacity: isOpen ? 1 : 1,
+          opacity: 1,
         }}
       />
     </div>
@@ -66,7 +66,6 @@ const Navigation = () => {
       touchStartY.current = null;
     };
 
-    // Add global touch listeners when menu is open
     if (isOpen) {
       document.addEventListener("touchstart", handleTouchStart);
       document.addEventListener("touchmove", handleTouchMove);
@@ -80,7 +79,7 @@ const Navigation = () => {
     };
   }, [isOpen]);
 
-  // Close menu when clicking outside
+  // Đóng menu khi click ngoài
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(event.target as Node) && isOpen) {
@@ -125,7 +124,12 @@ const Navigation = () => {
             </div>
 
             <div className="md:hidden">
-              <Button variant="ghost" size="sm" className="p-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="p-2"
+                onClick={() => setIsOpen(true)} // ✅ mở menu khi bấm vào hamburger
+              >
                 <AnimatedMenuIcon isOpen={isOpen} />
               </Button>
             </div>
@@ -137,10 +141,7 @@ const Navigation = () => {
       {isOpen && (
         <div
           className="md:hidden fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
-          onClick={(e) => {
-            console.log("Overlay clicked");
-            setIsOpen(false);
-          }}
+          onClick={() => setIsOpen(false)}
         />
       )}
 
