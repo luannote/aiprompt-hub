@@ -5,29 +5,53 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 
-// Icon động ba gạch / X
+// Icon động ba gạch / X với hiệu ứng đẹp mắt
 const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
   return (
-    <div className="relative w-6 h-6 flex flex-col justify-center items-center">
+    <div className="relative w-6 h-6 flex flex-col justify-center items-center overflow-hidden">
+      {/* Gạch thứ nhất - xoay thành X trên */}
       <div
-        className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
+        className="absolute w-5 h-0.5 bg-current transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
         style={{
-          transform: isOpen ? "rotate(45deg)" : "translateY(-6px)",
+          transform: isOpen 
+            ? "rotate(45deg) scale(1.1)" 
+            : "translateY(-6px) scale(1)",
           opacity: 1,
+          transformOrigin: "center",
         }}
       />
+      
+      {/* Gạch thứ hai - bay lượn và biến thành menu */}
       <div
-        className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
+        className="absolute w-5 h-0.5 bg-current transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]"
         style={{
           opacity: isOpen ? 0 : 1,
-          transform: isOpen ? "translateX(20px)" : "translateY(0px)",
+          transform: isOpen 
+            ? "translateX(100px) scale(3) rotate(180deg)" 
+            : "translateY(0px) scale(1) rotate(0deg)",
+          transformOrigin: "left center",
         }}
       />
+      
+      {/* Gạch thứ ba - xoay thành X dưới */}
       <div
-        className="absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out"
+        className="absolute w-5 h-0.5 bg-current transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
         style={{
-          transform: isOpen ? "rotate(-45deg)" : "translateY(6px)",
+          transform: isOpen 
+            ? "rotate(-45deg) scale(1.1)" 
+            : "translateY(6px) scale(1)",
           opacity: 1,
+          transformOrigin: "center",
+        }}
+      />
+      
+      {/* Hiệu ứng sóng lan tỏa khi mở */}
+      <div
+        className="absolute inset-0 rounded-full border-2 border-current transition-all duration-600"
+        style={{
+          opacity: isOpen ? 0 : 0,
+          transform: isOpen ? "scale(4)" : "scale(0.8)",
+          animation: isOpen ? "pulse 0.6s ease-out" : "none",
         }}
       />
     </div>
