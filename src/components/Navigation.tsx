@@ -13,11 +13,10 @@ import { Sparkles, Menu, Sun, Moon, Globe } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 
-// Animated hamburger/X button
+// Animated hamburger/X icon
 const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <div className="relative w-6 h-6 flex flex-col justify-center items-center overflow-hidden">
-      {/* Top bar */}
       <div
         className="absolute w-5 h-0.5 bg-current transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
         style={{
@@ -27,7 +26,6 @@ const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
           transformOrigin: "center",
         }}
       />
-      {/* Middle bar */}
       <div
         className="absolute w-5 h-0.5 bg-current transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)]"
         style={{
@@ -38,7 +36,6 @@ const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
           transformOrigin: "center",
         }}
       />
-      {/* Bottom bar */}
       <div
         className="absolute w-5 h-0.5 bg-current transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
         style={{
@@ -48,7 +45,6 @@ const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
           transformOrigin: "center",
         }}
       />
-      {/* Glow effect */}
       <div
         className="absolute inset-0 rounded-full transition-all duration-300"
         style={{
@@ -85,12 +81,10 @@ const Navigation = () => {
   const panelRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number | null>(null);
 
-  // Swipe to close
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY.current = e.touches[0].clientY;
     };
-
     const handleTouchMove = (e: TouchEvent) => {
       if (touchStartY.current !== null && isOpen) {
         const diff = e.touches[0].clientY - touchStartY.current;
@@ -100,7 +94,6 @@ const Navigation = () => {
         }
       }
     };
-
     const handleTouchEnd = () => {
       touchStartY.current = null;
     };
@@ -118,7 +111,6 @@ const Navigation = () => {
     };
   }, [isOpen]);
 
-  // Click outside to close
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -167,7 +159,7 @@ const Navigation = () => {
                 </Link>
               ))}
 
-              {/* Desktop menu dropdown */}
+              {/* Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="p-2">
@@ -176,9 +168,7 @@ const Navigation = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-background/95 backdrop-blur-xl border-border/50">
                   <DropdownMenuItem asChild>
-                    <Link to="/about" className="cursor-pointer">
-                      {t("about")}
-                    </Link>
+                    <Link to="/about">{t("about")}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel>{t("language")}</DropdownMenuLabel>
@@ -238,7 +228,7 @@ const Navigation = () => {
         />
       )}
 
-      {/* Mobile menu */}
+      {/* Mobile menu panel */}
       <div
         className={`md:hidden fixed top-16 left-0 w-full flex justify-center transition-all duration-300 ease-out z-50 pointer-events-none ${
           isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
@@ -260,7 +250,7 @@ const Navigation = () => {
               key={item.name}
               to={item.path}
               onClick={() => setIsOpen(false)}
-              className={`block px-4 py-3 rounded-md text-base font-medium transition-all duration-500 ease-in-out ${
+              className={`block px-4 py-3 rounded-md text-base font-medium transition-all duration-200 ease-in-out ${
                 isActive(item.path)
                   ? "text-primary bg-primary/15 shadow-sm"
                   : "text-muted-foreground hover:text-foreground hover:bg-white/40"
