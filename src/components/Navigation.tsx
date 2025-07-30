@@ -129,6 +129,66 @@ const Navigation = () => {
               </span>
             </Link>
 
+            <div className="hidden md:flex items-center space-x-8">
+              {desktopNavItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+                    isActive(item.path)
+                      ? "text-primary bg-primary/10 shadow-card"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="p-2">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-background/95 backdrop-blur-xl border-border/50">
+                  <DropdownMenuItem asChild>
+                    <Link to="/about" className="cursor-pointer">
+                      {t("about")}
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuLabel className="font-medium">{t("language")}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => setLanguage("en")} className="cursor-pointer">
+                    <Globe className="h-4 w-4 mr-2" />
+                    English {language === "en" && "✓"}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setLanguage("vi")} className="cursor-pointer">
+                    <Globe className="h-4 w-4 mr-2" />
+                    Tiếng Việt {language === "vi" && "✓"}
+                  </DropdownMenuItem>
+
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuLabel className="font-medium">{t("theme")}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
+                    {theme === "light" ? (
+                      <>
+                        <Moon className="h-4 w-4 mr-2" />
+                        {t("darkMode")}
+                      </>
+                    ) : (
+                      <>
+                        <Sun className="h-4 w-4 mr-2" />
+                        {t("lightMode")}
+                      </>
+                    )}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
             <div className="md:hidden">
               {!isOpen ? (
                 <Button
@@ -195,7 +255,6 @@ const Navigation = () => {
               </Link>
             ))}
 
-            {/* Mobile settings section */}
             <div className="border-t border-white/20 pt-3 mt-3">
               <div className="px-4 py-2 text-sm font-medium text-muted-foreground">
                 {t("settings")}
