@@ -129,59 +129,6 @@ const Navigation = () => {
               </span>
             </Link>
 
-            <div className="hidden md:flex items-center space-x-8">
-              {desktopNavItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
-                    isActive(item.path)
-                      ? "text-primary bg-primary/10 shadow-card"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="p-2">
-                    <Menu className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-background/95 backdrop-blur-xl border-border/50">
-                  <DropdownMenuItem asChild>
-                    <Link to="/about">{t("about")}</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel>{t("language")}</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={() => setLanguage("en")}>
-                    <Globe className="h-4 w-4 mr-2" />
-                    English {language === "en" && "✓"}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setLanguage("vi")}>
-                    <Globe className="h-4 w-4 mr-2" />
-                    Tiếng Việt {language === "vi" && "✓"}
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel>{t("theme")}</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={toggleTheme}>
-                    {theme === "light" ? (
-                      <>
-                        <Moon className="h-4 w-4 mr-2" />
-                        {t("darkMode")}
-                      </>
-                    ) : (
-                      <>
-                        <Sun className="h-4 w-4 mr-2" />
-                        {t("lightMode")}
-                      </>
-                    )}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-
             <div className="md:hidden">
               {!isOpen ? (
                 <Button
@@ -247,6 +194,63 @@ const Navigation = () => {
                 {item.name}
               </Link>
             ))}
+
+            {/* Mobile settings section */}
+            <div className="border-t border-white/20 pt-3 mt-3">
+              <div className="px-4 py-2 text-sm font-medium text-muted-foreground">
+                {t("settings")}
+              </div>
+
+              <div className="space-y-1">
+                <div className="px-4 py-2 text-xs font-medium text-muted-foreground">
+                  {t("language")}
+                </div>
+                <button
+                  onClick={() => setLanguage("en")}
+                  className={`w-full text-left px-4 py-2 rounded-md text-sm transition-all ${
+                    language === "en"
+                      ? "text-primary bg-primary/15"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/20"
+                  }`}
+                >
+                  <Globe className="h-4 w-4 mr-2 inline" />
+                  English {language === "en" && "✓"}
+                </button>
+                <button
+                  onClick={() => setLanguage("vi")}
+                  className={`w-full text-left px-4 py-2 rounded-md text-sm transition-all ${
+                    language === "vi"
+                      ? "text-primary bg-primary/15"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/20"
+                  }`}
+                >
+                  <Globe className="h-4 w-4 mr-2 inline" />
+                  Tiếng Việt {language === "vi" && "✓"}
+                </button>
+              </div>
+
+              <div className="space-y-1 mt-3">
+                <div className="px-4 py-2 text-xs font-medium text-muted-foreground">
+                  {t("theme")}
+                </div>
+                <button
+                  onClick={toggleTheme}
+                  className="w-full text-left px-4 py-2 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-white/20 transition-all"
+                >
+                  {theme === "light" ? (
+                    <>
+                      <Moon className="h-4 w-4 mr-2 inline" />
+                      {t("darkMode")}
+                    </>
+                  ) : (
+                    <>
+                      <Sun className="h-4 w-4 mr-2 inline" />
+                      {t("lightMode")}
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
