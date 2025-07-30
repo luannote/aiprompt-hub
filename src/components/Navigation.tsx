@@ -8,52 +8,59 @@ import { Sparkles } from "lucide-react";
 // Icon động ba gạch / X với hiệu ứng đẹp mắt
 const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
   return (
-    <div className="relative w-6 h-6 flex flex-col justify-center items-center overflow-hidden">
-      {/* Gạch thứ nhất - xoay thành X trên */}
+    <div className="relative w-6 h-6 flex flex-col justify-center items-center">
+      {/* Gạch thứ nhất - xoay thành X trên với hiệu ứng bounce */}
       <div
-        className="absolute w-5 h-0.5 bg-current transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
+        className={`absolute w-5 h-0.5 bg-current transition-all duration-700 ${
+          isOpen ? 'animate-bounce' : ''
+        }`}
         style={{
           transform: isOpen 
-            ? "rotate(45deg) scale(1.1)" 
-            : "translateY(-6px) scale(1)",
-          opacity: 1,
+            ? "rotate(45deg) translateY(0px) scale(1.2)" 
+            : "rotate(0deg) translateY(-6px) scale(1)",
           transformOrigin: "center",
+          filter: isOpen ? "drop-shadow(0 0 4px currentColor)" : "none"
         }}
       />
       
-      {/* Gạch thứ hai - bay lượn và biến thành menu */}
+      {/* Gạch thứ hai - bay lượn và xoay tròn biến mất */}
       <div
-        className="absolute w-5 h-0.5 bg-current transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]"
+        className="absolute w-5 h-0.5 bg-current transition-all duration-800"
         style={{
           opacity: isOpen ? 0 : 1,
           transform: isOpen 
-            ? "translateX(100px) scale(3) rotate(180deg)" 
-            : "translateY(0px) scale(1) rotate(0deg)",
-          transformOrigin: "left center",
+            ? "translateX(50px) translateY(-20px) rotate(720deg) scale(0)" 
+            : "translateX(0px) translateY(0px) rotate(0deg) scale(1)",
+          transformOrigin: "center",
+          filter: isOpen ? "blur(2px)" : "none"
         }}
       />
       
-      {/* Gạch thứ ba - xoay thành X dưới */}
+      {/* Gạch thứ ba - xoay thành X dưới với hiệu ứng bounce */}
       <div
-        className="absolute w-5 h-0.5 bg-current transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
+        className={`absolute w-5 h-0.5 bg-current transition-all duration-700 ${
+          isOpen ? 'animate-bounce' : ''
+        }`}
         style={{
           transform: isOpen 
-            ? "rotate(-45deg) scale(1.1)" 
-            : "translateY(6px) scale(1)",
-          opacity: 1,
+            ? "rotate(-45deg) translateY(0px) scale(1.2)" 
+            : "rotate(0deg) translateY(6px) scale(1)",
           transformOrigin: "center",
+          filter: isOpen ? "drop-shadow(0 0 4px currentColor)" : "none",
+          animationDelay: isOpen ? "0.1s" : "0s"
         }}
       />
       
-      {/* Hiệu ứng sóng lan tỏa khi mở */}
-      <div
-        className="absolute inset-0 rounded-full border-2 border-current transition-all duration-600"
-        style={{
-          opacity: isOpen ? 0 : 0,
-          transform: isOpen ? "scale(4)" : "scale(0.8)",
-          animation: isOpen ? "pulse 0.6s ease-out" : "none",
-        }}
-      />
+      {/* Hiệu ứng sáng lan tỏa */}
+      {isOpen && (
+        <div 
+          className="absolute inset-0 rounded-full animate-ping"
+          style={{
+            border: "1px solid currentColor",
+            opacity: 0.6
+          }}
+        />
+      )}
     </div>
   );
 };
