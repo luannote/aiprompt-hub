@@ -1,11 +1,11 @@
-// Fixed Navigation.tsx - Glassmorphic mobile menu with proper blur effect and global swipe-to-close
+// Navigation.tsx - Glassmorphic mobile menu with proper blur and fixed click behavior
 
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 
-// Animated hamburger menu component
+// Animated hamburger/X icon
 const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <div className="relative w-6 h-6 flex flex-col justify-center items-center">
@@ -47,6 +47,7 @@ const Navigation = () => {
   const panelRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number | null>(null);
 
+  // Swipe up to close
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY.current = e.touches[0].clientY;
@@ -79,7 +80,7 @@ const Navigation = () => {
     };
   }, [isOpen]);
 
-  // Đóng menu khi click ngoài
+  // Click outside to close
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(event.target as Node) && isOpen) {
@@ -107,6 +108,7 @@ const Navigation = () => {
               </span>
             </Link>
 
+            {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
                 <Link
@@ -123,12 +125,15 @@ const Navigation = () => {
               ))}
             </div>
 
+            {/* Mobile Menu Button */}
             <div className="md:hidden">
               <Button
                 variant="ghost"
                 size="sm"
                 className="p-2"
-                onClick={() => setIsOpen(true)} // ✅ mở menu khi bấm vào hamburger
+                onClick={() => {
+                  if (!isOpen) setIsOpen(true); // ✅ chỉ mở nếu đang đóng
+                }}
               >
                 <AnimatedMenuIcon isOpen={isOpen} />
               </Button>
@@ -137,7 +142,7 @@ const Navigation = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Overlay */}
       {isOpen && (
         <div
           className="md:hidden fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
