@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Tools from "./pages/Tools";
 import Prompts from "./pages/Prompts";
 import About from "./pages/About";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,10 +29,11 @@ const App = () => (
               <main className="flex-1">
                 <Routes>
                   <Route path="/" element={<Home />} />
-                  <Route path="/tools" element={<Tools />} />
-                  <Route path="/prompts" element={<Prompts />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="*" element={<NotFound />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/prompts" element={<Prompts />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
               <Footer />
