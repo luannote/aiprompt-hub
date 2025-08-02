@@ -2,9 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Sparkles, Zap, Layers, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import heroImage from "@/assets/hero-bg-new.jpg";
 
 const Home = () => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const features = [
     {
       icon: Sparkles,
@@ -31,11 +40,19 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image with Parallax */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
+          className="absolute inset-0 will-change-transform"
+          style={{ 
+            backgroundImage: `url(${heroImage})`,
+            backgroundAttachment: 'fixed',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            transform: `translateY(${scrollY * 0.5}px)`,
+            minHeight: '120vh'
+          }}
         >
           <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/60 to-background/80" />
         </div>
